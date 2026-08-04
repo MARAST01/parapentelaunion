@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Mail, MapPin, Phone, Facebook, Instagram, Wind, Shield, Camera, Users, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Mail, MapPin, Phone, Facebook, Instagram, Wind, Shield, Camera, Users, ChevronLeft, ChevronRight, X, Megaphone } from 'lucide-react';
 import heroImage from '/imports/carrusel/imagen61.webp';
 
 const galleryImages = [
@@ -31,28 +31,66 @@ function GalleryCarousel({ images }: { images: string[] }) {
   const [withTransition, setWithTransition] = useState(true);
   const [itemWidth, setItemWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isHidden, setIsHidden] = useState(
+    typeof document !== 'undefined' ? document.hidden : false
+  );
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const count = images.length;
   const slides = count > 0 ? [images[count - 1], ...images, images[0]] : images;
 
+  // Lleva cualquier índice (incluso uno que haya "derivado" fuera de rango) a su posición real 1..count
+  const normalizeIndex = (i: number) => (((i - 1) % count) + count) % count + 1;
+
   // Mide el ancho real de cada slide (se adapta a cualquier cantidad de imágenes y a cada breakpoint)
+  // Usamos ResizeObserver en vez de solo window.resize: es más liviano y también detecta
+  // cambios de layout que no vienen de un resize de ventana.
   useLayoutEffect(() => {
     const measure = () => {
       const first = trackRef.current?.firstElementChild as HTMLElement | undefined;
       if (first) setItemWidth(first.offsetWidth);
     };
     measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
+    const first = trackRef.current?.firstElementChild as HTMLElement | undefined;
+    if (!first || typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(first);
+    return () => observer.disconnect();
   }, [count]);
 
-  // Autoplay: se detiene suavemente al pasar el mouse o al abrir el lightbox
+  // Pausa el autoplay cuando la pestaña pasa a segundo plano. Sin esto, el setInterval
+  // sigue corriendo mientras el navegador puede dejar de disparar las transiciones CSS
+  // que reinician el loop infinito, haciendo que el índice crezca fuera de rango y el
+  // carrusel se quede "en blanco" al volver a la pestaña.
   useEffect(() => {
-    if (isPaused || lightboxIndex !== null || count <= 1) return;
+    const handleVisibility = () => {
+      const hidden = document.hidden;
+      setIsHidden(hidden);
+      if (!hidden) {
+        // Por seguridad, si el índice quedó fuera del rango válido mientras la pestaña
+        // estaba oculta, lo recolocamos sin transición antes de reanudar.
+        setIndex((prev) => {
+          if (prev <= 0 || prev >= count + 1) {
+            setWithTransition(false);
+            return normalizeIndex(prev);
+          }
+          return prev;
+        });
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [count]);
+
+  // Autoplay: se detiene suavemente al pasar el mouse, al abrir el lightbox o si la pestaña está oculta
+  useEffect(() => {
+    if (isPaused || isHidden || lightboxIndex !== null || count <= 1) return;
     const timer = setInterval(() => setIndex((prev) => prev + 1), 3500);
     return () => clearInterval(timer);
-  }, [isPaused, lightboxIndex, count]);
+  }, [isPaused, isHidden, lightboxIndex, count]);
 
   // Salto silencioso al llegar a los clones, para simular un loop infinito continuo
   const handleTransitionEnd = () => {
@@ -117,6 +155,7 @@ function GalleryCarousel({ images }: { images: string[] }) {
                     alt={`Galería ${realIdx + 1}`}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     draggable={false}
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -236,11 +275,11 @@ export default function App() {
             </div>
             <div className="hidden md:flex items-center gap-8">
               <a href="#inicio" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Inicio</a>
-              <a href="#paquetes" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Paquetes</a>
+              <a href="#servicios-adicionales" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Servicios Adicionales</a>
               <a href="#testimonios" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Testimonios</a>
               <a href="#contacto" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Contacto</a>
               <a
-                href="https://wa.me/+573001234567"
+                href="https://wa.me/+573205844385"
                 className="btn-primary-text bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-full hover:shadow-lg hover:shadow-purple-500/50 transition-all"
               >
                 Reservar Ahora
@@ -272,13 +311,13 @@ export default function App() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="#paquetes"
+              href="#servicios-adicionales"
               className="btn-secondary-text bg-white text-purple-700 px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all"
             >
-              Ver Paquetes
+              Ver Servicios
             </a>
             <a
-              href="https://wa.me/+573001234567"
+              href="https://wa.me/+573205844385"
               className="btn-primary-text bg-green-500 text-white px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
               <Phone className="w-5 h-5" />
@@ -309,7 +348,7 @@ export default function App() {
               {
                 icon: Shield,
                 title: "100% Seguro",
-                description: "Equipo certificado y pilotos con más de 10 años de experiencia"
+                description: "Equipo certificado y pilotos con más de 23 años de experiencia"
               },
               {
                 icon: Users,
@@ -342,103 +381,62 @@ export default function App() {
         </div>
       </section>
 
-      {/* Packages Section */}
-      <section id="paquetes" className="py-20 bg-white">
+      {/* Additional Services Section */}
+      <section id="servicios-adicionales" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-h2 text-gray-900 mb-4">
-              Nuestros Paquetes
+              Servicios Adicionales
             </h2>
             <p className="text-body-copy text-gray-600">
-              Elige la experiencia perfecta para ti
+              Personaliza tu vuelo y hazlo aún más inolvidable
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                name: "Vuelo Básico",
-                price: "$180.000 COP",
-                duration: "15-20 min",
-                features: [
-                  "Vuelo en parapente biplaza",
-                  "Equipo de seguridad completo",
-                  "Instructor certificado",
-                  "Seguro incluido",
-                  "Vistas panorámicas espectaculares"
-                ],
-                popular: false
+                icon: Megaphone,
+                name: "Letreros Gigantes Personalizados",
+                description: "Mensajes para cumpleaños, aniversarios o sorpresas.",
+                price: "$50.000",
+                priceNote: "adicionales al vuelo"
               },
               {
-                name: "Vuelo Premium",
-                price: "$270.000 COP",
-                duration: "25-30 min",
-                features: [
-                  "Todo lo del paquete básico",
-                  "Vuelo extendido",
-                  "Foto y video profesional",
-                  "Maniobras acrobáticas (opcional)",
-                  "Certificado de vuelo digital",
-                  "Recuerdos descargables"
-                ],
-                popular: true
+                icon: Camera,
+                name: "Fotografía 360°",
+                description: "Revive tu vuelo desde todos los ángulos.",
+                price: "$50.000",
+                priceNote: "adicionales al vuelo"
               },
               {
-                name: "Vuelo VIP",
-                price: "$380.000 COP",
-                duration: "40-45 min",
-                features: [
-                  "Todo lo del paquete premium",
-                  "Vuelo al atardecer (sujeto a clima)",
-                  "Sesión fotográfica profesional",
-                  "Video editado profesional",
-                  "Transporte desde hotel (zona)",
-                  "Bebida de cortesía post-vuelo"
-                ],
-                popular: false
+                icon: Wind,
+                name: "Vuelo Extremo",
+                description: "Acrobacias y maniobras para quienes quieran vivir una experiencia única.",
+                price: "$50.000",
+                priceNote: "pesos adicionales"
               }
-            ].map((pkg, index) => (
+            ].map((service, index) => (
               <div
                 key={index}
-                className={`relative bg-white rounded-3xl shadow-xl overflow-hidden hover:scale-105 transition-all ${
-                  pkg.popular ? 'ring-4 ring-purple-600' : ''
-                }`}
+                className="relative bg-gray-50 rounded-3xl shadow-xl overflow-hidden hover:scale-105 transition-all p-8 flex flex-col"
               >
-                {pkg.popular && (
-                  <div className="badge-text absolute top-0 right-0 bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-bl-2xl">
-                    Más Popular
-                  </div>
-                )}
-                <div className={`p-8 ${pkg.popular ? 'bg-gradient-to-br from-purple-50 to-purple-100' : 'bg-gray-50'}`}>
-                  <h3 className="text-h3 text-gray-900 mb-2">{pkg.name}</h3>
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="price-text bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
-                      {pkg.price}
-                    </span>
-                  </div>
-                  <p className="text-secondary mb-6">Duración: {pkg.duration}</p>
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center mb-6">
+                  <service.icon className="w-8 h-8 text-white" />
                 </div>
-                <div className="p-8">
-                  <ul className="space-y-4 mb-8">
-                    {pkg.features.map((feature, fIndex) => (
-                      <li key={fIndex} className="flex items-start gap-3">
-                        <div className="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5 flex-shrink-0">
-                          <div className="w-2 h-2 rounded-full bg-purple-600" />
-                        </div>
-                        <span className="text-secondary">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href={`https://wa.me/+573001234567?text=Hola! Me interesa el paquete ${pkg.name}`}
-                    className={`btn-primary-text block w-full text-center py-3 rounded-full transition-all ${
-                      pkg.popular
-                        ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:shadow-lg hover:shadow-purple-500/50'
-                        : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                    }`}
-                  >
-                    Reservar Ahora
-                  </a>
+                <h3 className="text-h3 text-gray-900 mb-3">{service.name}</h3>
+                <p className="text-secondary text-gray-600 mb-6 flex-grow">{service.description}</p>
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="price-text bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
+                    {service.price}
+                  </span>
+                  <span className="text-secondary text-gray-500">{service.priceNote}</span>
                 </div>
+                <a
+                  href={`https://wa.me/+573205844385?text=Hola! Me interesa el servicio adicional de ${service.name}`}
+                  className="btn-primary-text block w-full text-center py-3 rounded-full transition-all bg-gray-100 text-gray-900 hover:bg-gray-200"
+                >
+                  Consultar
+                </a>
               </div>
             ))}
           </div>
@@ -514,7 +512,7 @@ export default function App() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
               { number: "+500", label: "Vuelos realizados" },
-              { number: "10+", label: "Años de experiencia" },
+              { number: "23+", label: "Años de experiencia" },
               { number: "100%", label: "Seguridad certificada" },
               { number: "4.9", label: "Calificación promedio" }
             ].map((stat, index) => (
@@ -560,8 +558,8 @@ export default function App() {
                   </div>
                   <div>
                     <h4 className="text-h4 text-gray-900 mb-1">Teléfono / WhatsApp</h4>
-                    <a href="tel:+573001234567" className="text-secondary hover:text-purple-600">
-                      +57 300 123 4567
+                    <a href="tel:+573205844385" className="text-secondary hover:text-purple-600">
+                      +57 320 584 4385
                     </a>
                   </div>
                 </div>
@@ -590,13 +588,13 @@ export default function App() {
               </div>
               <div className="mt-8 flex gap-4">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/parapentelaunion/"
                   className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
                 >
                   <Facebook className="w-6 h-6 text-white" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/parapentelaunion/"
                   className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center hover:shadow-lg transition-all"
                 >
                   <Instagram className="w-6 h-6 text-white" />
@@ -605,7 +603,7 @@ export default function App() {
             </div>
             <div className="bg-gray-100 rounded-3xl overflow-hidden h-[500px]">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31776.15!2d-76.1!3d4.53!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e39c5f5c5f5c5f5%3A0x5f5c5f5c5f5c5f5c!2sLa%20Uni%C3%B3n%2C%20Valle%20del%20Cauca%2C%20Colombia!5e0!3m2!1ses!2sco!4v1234567890123!5m2!1ses!2sco"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3977.3447456204563!2d-76.10126489999999!3d4.531789700000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e383f933f93abc3%3A0x52123900b636d635!2sParapente%20La%20Union!5e0!3m2!1ses!2sco!4v1785877479328!5m2!1ses!2sco"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -624,7 +622,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Wind className="w-8 h-8" />
+              <img src="/imports/logo.webp" alt="Logo" className="w-15 h-15" />
               <span className="font-brand font-bold text-2xl">Parapente La Unión</span>
             </div>
             <p className="footer-link-text text-purple-200 mb-6">
@@ -641,7 +639,7 @@ export default function App() {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/+573001234567"
+        href="https://api.whatsapp.com/send?phone=+573205844385&text=Estaba%20viendo%20su%20pagina%20web%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20vuelos%20en%20parapente"
         className="fixed bottom-8 right-8 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform z-50 group"
         aria-label="Contactar por WhatsApp"
       >
