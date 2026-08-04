@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Mail, MapPin, Phone, Facebook, Instagram, Wind, Shield, Camera, Users, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import heroImage from '/imports/portada.jpg';
+import heroImage from '/imports/carrusel/imagen61.webp';
 
 const galleryImages = [
   '/imports/carrusel/imagen57.webp',
@@ -190,212 +190,47 @@ function GalleryCarousel({ images }: { images: string[] }) {
 }
 
 export default function App() {
+  const [navVisible, setNavVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY.current;
+
+      // Ignora micro-movimientos para evitar parpadeos
+      if (Math.abs(delta) < 5) return;
+
+      if (delta > 0 && currentScrollY > 40) {
+        setNavVisible(false); // scroll hacia abajo -> desaparece
+      } else if (delta < 0) {
+        setNavVisible(true); // scroll hacia arriba -> aparece
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Sistema Tipográfico: Sora (impacto), Montserrat (estructura/UI), Outfit (lectura) */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Montserrat:wght@500;600&family=Outfit:wght@400;500;600&display=swap');
-
-        .font-brand {
-          font-family: 'Sora', sans-serif;
-        }
-
-        /* Hero / Display */
-        .text-hero {
-          font-family: 'Sora', sans-serif;
-          font-weight: 700;
-          font-size: 40px;
-          line-height: 1.1;
-          letter-spacing: -2px;
-        }
-        @media (min-width: 768px) { .text-hero { font-size: 52px; } }
-        @media (min-width: 1024px) { .text-hero { font-size: 64px; } }
-
-        .text-hero-subtitle {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 18px;
-          line-height: 1.6;
-        }
-        @media (min-width: 768px) { .text-hero-subtitle { font-size: 22px; } }
-
-        /* Encabezados */
-        .text-h1 {
-          font-family: 'Sora', sans-serif;
-          font-weight: 700;
-          font-size: clamp(32px, 6vw, 48px);
-          line-height: 1.2;
-        }
-        .text-h2 {
-          font-family: 'Sora', sans-serif;
-          font-weight: 600;
-          font-size: clamp(28px, 5vw, 36px);
-          line-height: 1.25;
-        }
-        .text-h3 {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 28px;
-        }
-        .text-h4 {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 22px;
-        }
-        .text-h5 {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 500;
-          font-size: 18px;
-        }
-        .text-h6 {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 500;
-          font-size: 16px;
-        }
-
-        /* Contenido */
-        .text-body-copy {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 17px;
-          line-height: 1.8;
-        }
-        .text-secondary {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 15px;
-          color: #555555;
-        }
-        .text-caption {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
-        }
-
-        /* Botones y navegación */
-        .btn-primary-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 16px;
-          letter-spacing: 0.5px;
-        }
-        .btn-secondary-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 500;
-          font-size: 16px;
-        }
-        .nav-link-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 500;
-          font-size: 16px;
-          transition: font-weight 0.15s ease;
-        }
-        .nav-link-text:hover {
-          font-weight: 600;
-        }
-        .breadcrumb-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 500;
-          font-size: 14px;
-        }
-
-        /* Formularios */
-        .label-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 500;
-          font-size: 15px;
-        }
-        .input-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 16px;
-        }
-        .input-text::placeholder {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 16px;
-          color: #999999;
-        }
-
-        /* Cards */
-        .card-title-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 22px;
-        }
-        .card-description-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 16px;
-        }
-
-        /* Testimonios */
-        .testimonial-name-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 18px;
-        }
-        .testimonial-comment-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 17px;
-        }
-        .testimonial-role-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
-        }
-
-        /* Estadísticas */
-        .stat-number-text {
-          font-family: 'Sora', sans-serif;
-          font-weight: 700;
-          font-size: 56px;
-        }
-        .stat-label-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 500;
-          font-size: 16px;
-        }
-
-        /* Precio y badges */
-        .price-text {
-          font-family: 'Sora', sans-serif;
-          font-weight: 700;
-          font-size: 40px;
-        }
-        .badge-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 13px;
-          text-transform: uppercase;
-        }
-
-        /* Footer */
-        .footer-title-text {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 600;
-          font-size: 18px;
-        }
-        .footer-link-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 16px;
-        }
-        .footer-copyright-text {
-          font-family: 'Outfit', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
-        }
-      `}</style>
-
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 transition-opacity duration-700 ease-out ${
+          navVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-center md:justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <Wind className="w-8 h-8 text-purple-600" />
-              <span className="font-brand font-bold text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+              <img src="/imports/logo.webp" alt="Logo" className="w-15 h-15" />
+              <span
+                className="bangers-regular text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
+              >
                 Parapente La Unión
               </span>
             </div>
