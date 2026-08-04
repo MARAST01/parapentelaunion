@@ -4,24 +4,166 @@ import heroImage from '../imports/portada.jpg';
 export default function App() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Sistema Tipográfico: Sora (impacto), Montserrat (estructura/UI), Outfit (lectura) */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Montserrat:wght@500;600&family=Outfit:wght@400;500;600&display=swap');
+
+        .font-brand {
+          font-family: 'Sora', sans-serif;
+        }
+
+        /* Hero / Display */
+        .text-hero {
+          font-family: 'Sora', sans-serif;
+          font-weight: 700;
+          font-size: 40px;
+          line-height: 1.1;
+          letter-spacing: -2px;
+        }
+        @media (min-width: 768px) { .text-hero { font-size: 52px; } }
+        @media (min-width: 1024px) { .text-hero { font-size: 64px; } }
+
+        .text-hero-subtitle {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 18px;
+          line-height: 1.6;
+        }
+        @media (min-width: 768px) { .text-hero-subtitle { font-size: 22px; } }
+
+        /* Encabezados */
+        .text-h1 {
+          font-family: 'Sora', sans-serif;
+          font-weight: 700;
+          font-size: clamp(32px, 6vw, 48px);
+          line-height: 1.2;
+        }
+        .text-h2 {
+          font-family: 'Sora', sans-serif;
+          font-weight: 600;
+          font-size: clamp(28px, 5vw, 36px);
+          line-height: 1.25;
+        }
+        .text-h3 {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 28px;
+        }
+        .text-h4 {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 22px;
+        }
+
+        /* Contenido */
+        .text-body-copy {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 17px;
+          line-height: 1.8;
+        }
+        .text-secondary {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 15px;
+          color: #555555;
+        }
+        .text-caption {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+        }
+
+        /* Botones y navegación */
+        .btn-primary-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 16px;
+          letter-spacing: 0.5px;
+        }
+        .nav-link-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+          transition: font-weight 0.15s ease;
+        }
+        .nav-link-text:hover {
+          font-weight: 600;
+        }
+
+        /* Cards */
+        .card-title-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 22px;
+        }
+        .card-description-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+        }
+
+        /* Testimonios */
+        .testimonial-name-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 18px;
+        }
+        .testimonial-comment-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 17px;
+        }
+
+        /* Precio y badges */
+        .price-text {
+          font-family: 'Sora', sans-serif;
+          font-weight: 700;
+          font-size: 40px;
+        }
+        .badge-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 13px;
+          text-transform: uppercase;
+        }
+
+        /* Footer */
+        .footer-title-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-size: 18px;
+        }
+        .footer-link-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+        }
+        .footer-copyright-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+        }
+      `}</style>
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
               <Wind className="w-8 h-8 text-purple-600" />
-              <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+              <span className="font-brand font-bold text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                 Parapente La Unión
               </span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              <a href="#inicio" className="text-gray-700 hover:text-purple-600 transition-colors">Inicio</a>
-              <a href="#paquetes" className="text-gray-700 hover:text-purple-600 transition-colors">Paquetes</a>
-              <a href="#testimonios" className="text-gray-700 hover:text-purple-600 transition-colors">Testimonios</a>
-              <a href="#contacto" className="text-gray-700 hover:text-purple-600 transition-colors">Contacto</a>
+              <a href="#inicio" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Inicio</a>
+              <a href="#paquetes" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Paquetes</a>
+              <a href="#testimonios" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Testimonios</a>
+              <a href="#contacto" className="nav-link-text text-gray-700 hover:text-purple-600 transition-colors">Contacto</a>
               <a
                 href="https://wa.me/+573001234567"
-                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-full hover:shadow-lg hover:shadow-purple-500/50 transition-all"
+                className="btn-primary-text bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-full hover:shadow-lg hover:shadow-purple-500/50 transition-all"
               >
                 Reservar Ahora
               </a>
@@ -39,27 +181,27 @@ export default function App() {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-purple-700/30 to-purple-600/40" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-hero text-white mb-6">
             Vive la Aventura
             <br />
             <span className="bg-gradient-to-r from-yellow-300 to-yellow-400 bg-clip-text text-transparent">
               desde las Alturas
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-hero-subtitle text-white/90 mb-8 max-w-2xl mx-auto">
             Experimenta la libertad del vuelo con los mejores pilotos certificados de La Unión.
             Tu aventura comienza aquí.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="#paquetes"
-              className="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all text-lg"
+              className="btn-primary-text bg-white text-purple-700 px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all"
             >
               Ver Paquetes
             </a>
             <a
               href="https://wa.me/+573001234567"
-              className="bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all text-lg flex items-center justify-center gap-2"
+              className="btn-primary-text bg-green-500 text-white px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
               <Phone className="w-5 h-5" />
               Contactar por WhatsApp
@@ -77,10 +219,10 @@ export default function App() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-h2 text-gray-900 mb-4">
               ¿Por qué elegirnos?
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-body-copy text-gray-600">
               Seguridad, experiencia y momentos inolvidables
             </p>
           </div>
@@ -114,8 +256,8 @@ export default function App() {
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="card-title-text text-gray-900 mb-2">{feature.title}</h3>
+                <p className="card-description-text text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -126,10 +268,10 @@ export default function App() {
       <section id="paquetes" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-h2 text-gray-900 mb-4">
               Nuestros Paquetes
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-body-copy text-gray-600">
               Elige la experiencia perfecta para ti
             </p>
           </div>
@@ -184,18 +326,18 @@ export default function App() {
                 }`}
               >
                 {pkg.popular && (
-                  <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 text-sm font-semibold rounded-bl-2xl">
-                    MÁS POPULAR
+                  <div className="badge-text absolute top-0 right-0 bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-bl-2xl">
+                    Más Popular
                   </div>
                 )}
                 <div className={`p-8 ${pkg.popular ? 'bg-gradient-to-br from-purple-50 to-purple-100' : 'bg-gray-50'}`}>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{pkg.name}</h3>
+                  <h3 className="text-h3 text-gray-900 mb-2">{pkg.name}</h3>
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
+                    <span className="price-text bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
                       {pkg.price}
                     </span>
                   </div>
-                  <p className="text-gray-600 font-medium mb-6">Duración: {pkg.duration}</p>
+                  <p className="text-secondary mb-6">Duración: {pkg.duration}</p>
                 </div>
                 <div className="p-8">
                   <ul className="space-y-4 mb-8">
@@ -204,13 +346,13 @@ export default function App() {
                         <div className="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5 flex-shrink-0">
                           <div className="w-2 h-2 rounded-full bg-purple-600" />
                         </div>
-                        <span className="text-gray-700">{feature}</span>
+                        <span className="text-secondary">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <a
                     href={`https://wa.me/+573001234567?text=Hola! Me interesa el paquete ${pkg.name}`}
-                    className={`block w-full text-center py-3 rounded-full font-semibold transition-all ${
+                    className={`btn-primary-text block w-full text-center py-3 rounded-full transition-all ${
                       pkg.popular
                         ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:shadow-lg hover:shadow-purple-500/50'
                         : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
@@ -223,7 +365,7 @@ export default function App() {
             ))}
           </div>
           <div className="mt-12 text-center">
-            <p className="text-gray-600 mb-4">
+            <p className="text-secondary mb-4">
               Los servicios adicionales se pueden agendar directamente vía WhatsApp al coordinar la fecha del vuelo
             </p>
           </div>
@@ -234,10 +376,10 @@ export default function App() {
       <section id="testimonios" className="py-20 bg-gradient-to-br from-purple-900 to-purple-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-h2 text-white mb-4">
               Experiencias Inolvidables
             </h2>
-            <p className="text-xl text-purple-100">
+            <p className="text-body-copy text-purple-100">
               Cada vuelo cuenta una historia. Estas son las experiencias de quienes ya se atrevieron a volar con nosotros.
             </p>
           </div>
@@ -273,7 +415,7 @@ export default function App() {
                     className="w-16 h-16 rounded-full object-cover ring-4 ring-purple-100"
                   />
                   <div>
-                    <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                    <h4 className="testimonial-name-text text-gray-900">{testimonial.name}</h4>
                     <div className="flex gap-1">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <span key={i} className="text-yellow-400">★</span>
@@ -281,7 +423,7 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">"{testimonial.text}"</p>
+                <p className="testimonial-comment-text text-gray-600 italic">"{testimonial.text}"</p>
               </div>
             ))}
           </div>
@@ -292,10 +434,10 @@ export default function App() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-h2 text-gray-900 mb-4">
               Galería
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-body-copy text-gray-600">
               Momentos capturados en las alturas
             </p>
           </div>
@@ -330,10 +472,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-h2 text-gray-900 mb-6">
                 ¿Listo para volar?
               </h2>
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="text-body-copy text-gray-600 mb-8">
                 Contáctanos y reserva tu vuelo hoy mismo. Estamos aquí para hacer realidad tu aventura.
               </p>
               <div className="space-y-6">
@@ -342,8 +484,8 @@ export default function App() {
                     <Phone className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Teléfono / WhatsApp</h4>
-                    <a href="tel:+573001234567" className="text-gray-600 hover:text-purple-600">
+                    <h4 className="text-h4 text-gray-900 mb-1">Teléfono / WhatsApp</h4>
+                    <a href="tel:+573001234567" className="text-secondary hover:text-purple-600">
                       +57 300 123 4567
                     </a>
                   </div>
@@ -353,8 +495,8 @@ export default function App() {
                     <Mail className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
-                    <a href="mailto:info@parapente-launion.com" className="text-gray-600 hover:text-purple-600">
+                    <h4 className="text-h4 text-gray-900 mb-1">Email</h4>
+                    <a href="mailto:info@parapente-launion.com" className="text-secondary hover:text-purple-600">
                       info@parapente-launion.com
                     </a>
                   </div>
@@ -364,8 +506,8 @@ export default function App() {
                     <MapPin className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Ubicación</h4>
-                    <p className="text-gray-600">
+                    <h4 className="text-h4 text-gray-900 mb-1">Ubicación</h4>
+                    <p className="text-secondary">
                       La Unión, Valle del Cauca, Colombia
                     </p>
                   </div>
@@ -408,13 +550,13 @@ export default function App() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Wind className="w-8 h-8" />
-              <span className="font-bold text-2xl">Parapente La Unión</span>
+              <span className="font-brand font-bold text-2xl">Parapente La Unión</span>
             </div>
-            <p className="text-purple-200 mb-6">
+            <p className="footer-link-text text-purple-200 mb-6">
               Tu aventura comienza aquí. Vuela con los mejores.
             </p>
             <div className="border-t border-purple-600 pt-6">
-              <p className="text-purple-300 text-sm">
+              <p className="footer-copyright-text text-purple-300">
                 © 2026 Parapente La Unión. Todos los derechos reservados.
               </p>
             </div>
@@ -429,7 +571,7 @@ export default function App() {
         aria-label="Contactar por WhatsApp"
       >
         <Phone className="w-8 h-8 text-white group-hover:rotate-12 transition-transform" />
-        <span className="absolute -top-12 right-0 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="text-caption absolute -top-12 right-0 bg-gray-900 text-white px-4 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
           ¿Necesitas ayuda?
         </span>
       </a>
