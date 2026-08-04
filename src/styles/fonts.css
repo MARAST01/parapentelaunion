@@ -1,0 +1,201 @@
+/* ============================================================
+   Fuentes del proyecto
+   Los <link> de Google Fonts (preconnect + stylesheet) van en
+   index.html, dentro de <head>. Este archivo solo define las
+   clases tipográficas que consume App.tsx.
+   ============================================================ */
+
+.bangers-regular {
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.playfair-display-title {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.font-brand {
+  font-family: 'Sora', sans-serif;
+}
+
+.text-hero {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+@media (min-width: 768px) { .text-hero { font-size: 52px; } }
+@media (min-width: 1024px) { .text-hero { font-size: 64px; } }
+
+.text-hero-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+}
+@media (min-width: 768px) { .text-hero-subtitle { font-size: 22px; } }
+
+.text-h1 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: clamp(32px, 6vw, 48px);
+  line-height: 1.2;
+}
+.text-h2 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: clamp(28px, 5vw, 36px);
+  line-height: 1.25;
+}
+.text-h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+}
+.text-h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+}
+.text-h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+}
+.text-h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.text-body-copy {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.8;
+}
+.text-secondary {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #555555;
+}
+.text-caption {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.btn-primary-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+.btn-secondary-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+.nav-link-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  transition: font-weight 0.15s ease;
+}
+.nav-link-text:hover {
+  font-weight: 600;
+}
+.breadcrumb-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.label-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+}
+.input-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+.input-text::placeholder {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #999999;
+}
+
+.card-title-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+}
+.card-description-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.testimonial-name-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+.testimonial-comment-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+}
+.testimonial-role-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.stat-number-text {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+}
+.stat-label-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.price-text {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+}
+.badge-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.footer-title-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+.footer-link-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+.footer-copyright-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
