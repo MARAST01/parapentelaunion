@@ -1,5 +1,193 @@
-import { Mail, MapPin, Phone, Facebook, Instagram, Wind, Shield, Camera, Users } from 'lucide-react';
-import heroImage from '../imports/portada.jpg';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Mail, MapPin, Phone, Facebook, Instagram, Wind, Shield, Camera, Users, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import heroImage from '/imports/portada.jpg';
+
+const galleryImages = [
+  '/imports/carrusel/imagen57.webp',
+  '/imports/carrusel/imagen2.webp',
+  '/imports/carrusel/imagen3.webp',
+  '/imports/carrusel/imagen4.webp',
+  '/imports/carrusel/imagen5.webp',
+  '/imports/carrusel/imagen6.webp',
+  '/imports/carrusel/imagen7.webp',
+  '/imports/carrusel/imagen8.webp',
+  '/imports/carrusel/imagen9.webp',
+  '/imports/carrusel/imagen10.webp',
+  '/imports/carrusel/imagen11.webp',
+  '/imports/carrusel/imagen12.webp',
+  '/imports/carrusel/imagen13.webp',
+  '/imports/carrusel/imagen14.webp',
+  '/imports/carrusel/imagen15.webp',
+  '/imports/carrusel/imagen16.webp',
+  '/imports/carrusel/imagen17.webp',
+  '/imports/carrusel/imagen18.webp',
+  '/imports/carrusel/imagen19.webp',
+  '/imports/carrusel/imagen20.webp',
+];
+
+function GalleryCarousel({ images }: { images: string[] }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(1);
+  const [withTransition, setWithTransition] = useState(true);
+  const [itemWidth, setItemWidth] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const count = images.length;
+  const slides = count > 0 ? [images[count - 1], ...images, images[0]] : images;
+
+  // Mide el ancho real de cada slide (se adapta a cualquier cantidad de imágenes y a cada breakpoint)
+  useLayoutEffect(() => {
+    const measure = () => {
+      const first = trackRef.current?.firstElementChild as HTMLElement | undefined;
+      if (first) setItemWidth(first.offsetWidth);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [count]);
+
+  // Autoplay: se detiene suavemente al pasar el mouse o al abrir el lightbox
+  useEffect(() => {
+    if (isPaused || lightboxIndex !== null || count <= 1) return;
+    const timer = setInterval(() => setIndex((prev) => prev + 1), 3500);
+    return () => clearInterval(timer);
+  }, [isPaused, lightboxIndex, count]);
+
+  // Salto silencioso al llegar a los clones, para simular un loop infinito continuo
+  const handleTransitionEnd = () => {
+    if (index === count + 1) {
+      setWithTransition(false);
+      setIndex(1);
+    } else if (index === 0) {
+      setWithTransition(false);
+      setIndex(count);
+    }
+  };
+
+  useEffect(() => {
+    if (!withTransition) {
+      const raf = requestAnimationFrame(() => requestAnimationFrame(() => setWithTransition(true)));
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [withTransition]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxIndex(null);
+      if (e.key === 'ArrowRight') setLightboxIndex((prev) => (prev === null ? null : (prev + 1) % count));
+      if (e.key === 'ArrowLeft') setLightboxIndex((prev) => (prev === null ? null : (prev - 1 + count) % count));
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [lightboxIndex, count]);
+
+  const goNext = () => setIndex((prev) => prev + 1);
+  const goPrev = () => setIndex((prev) => prev - 1);
+  const lightboxNext = () => setLightboxIndex((prev) => (prev === null ? null : (prev + 1) % count));
+  const lightboxPrev = () => setLightboxIndex((prev) => (prev === null ? null : (prev - 1 + count) % count));
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div className="overflow-hidden">
+        <div
+          ref={trackRef}
+          onTransitionEnd={handleTransitionEnd}
+          className="flex"
+          style={{
+            transform: itemWidth ? `translateX(-${index * itemWidth}px)` : undefined,
+            transition: withTransition ? 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+          }}
+        >
+          {slides.map((img, i) => {
+            const realIdx = ((i - 1) + count) % count;
+            return (
+              <div key={i} className="flex-shrink-0 w-[78%] sm:w-[46%] lg:w-[31%] px-2">
+                <div
+                  className="aspect-square overflow-hidden rounded-2xl group cursor-pointer"
+                  onClick={() => setLightboxIndex(realIdx)}
+                >
+                  <img
+                    src={img}
+                    alt={`Galería ${realIdx + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    draggable={false}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {count > 1 && (
+        <>
+          <button
+            onClick={goPrev}
+            aria-label="Imagen anterior"
+            className="absolute top-1/2 -translate-y-1/2 -left-2 sm:left-2 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 z-10"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-purple-700" />
+          </button>
+          <button
+            onClick={goNext}
+            aria-label="Siguiente imagen"
+            className="absolute top-1/2 -translate-y-1/2 -right-2 sm:right-2 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 z-10"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-purple-700" />
+          </button>
+        </>
+      )}
+
+      {lightboxIndex !== null && (
+        <div
+          className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 sm:p-8"
+          onClick={() => setLightboxIndex(null)}
+        >
+          <button
+            onClick={() => setLightboxIndex(null)}
+            aria-label="Cerrar"
+            className="absolute top-4 right-4 sm:top-8 sm:right-8 w-11 h-11 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors z-10"
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
+
+          {count > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
+              aria-label="Imagen anterior"
+              className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-6 w-11 h-11 sm:w-14 sm:h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
+            >
+              <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+            </button>
+          )}
+
+          <img
+            src={images[lightboxIndex]}
+            alt={`Galería ${lightboxIndex + 1}`}
+            className="max-w-full max-h-[85vh] rounded-3xl object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {count > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
+              aria-label="Siguiente imagen"
+              className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-6 w-11 h-11 sm:w-14 sm:h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
+            >
+              <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -54,6 +242,16 @@ export default function App() {
           font-weight: 600;
           font-size: 22px;
         }
+        .text-h5 {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: 18px;
+        }
+        .text-h6 {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+        }
 
         /* Contenido */
         .text-body-copy {
@@ -81,6 +279,11 @@ export default function App() {
           font-size: 16px;
           letter-spacing: 0.5px;
         }
+        .btn-secondary-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+        }
         .nav-link-text {
           font-family: 'Montserrat', sans-serif;
           font-weight: 500;
@@ -89,6 +292,29 @@ export default function App() {
         }
         .nav-link-text:hover {
           font-weight: 600;
+        }
+        .breadcrumb-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 500;
+          font-size: 14px;
+        }
+
+        /* Formularios */
+        .label-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: 15px;
+        }
+        .input-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+        }
+        .input-text::placeholder {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+          color: #999999;
         }
 
         /* Cards */
@@ -113,6 +339,23 @@ export default function App() {
           font-family: 'Outfit', sans-serif;
           font-weight: 400;
           font-size: 17px;
+        }
+        .testimonial-role-text {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+        }
+
+        /* Estadísticas */
+        .stat-number-text {
+          font-family: 'Sora', sans-serif;
+          font-weight: 700;
+          font-size: 56px;
+        }
+        .stat-label-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: 16px;
         }
 
         /* Precio y badges */
@@ -195,7 +438,7 @@ export default function App() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="#paquetes"
-              className="btn-primary-text bg-white text-purple-700 px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all"
+              className="btn-secondary-text bg-white text-purple-700 px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all"
             >
               Ver Paquetes
             </a>
@@ -430,6 +673,25 @@ export default function App() {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <section className="py-16 bg-gradient-to-br from-purple-600 to-purple-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { number: "+500", label: "Vuelos realizados" },
+              { number: "10+", label: "Años de experiencia" },
+              { number: "100%", label: "Seguridad certificada" },
+              { number: "4.9", label: "Calificación promedio" }
+            ].map((stat, index) => (
+              <div key={index}>
+                <p className="stat-number-text text-white mb-1">{stat.number}</p>
+                <p className="stat-label-text text-purple-100">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Gallery Preview */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -441,29 +703,7 @@ export default function App() {
               Momentos capturados en las alturas
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              "https://images.unsplash.com/photo-1758210606707-ed9a369e1e3f?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1759340875463-30962542e44d?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1758272410353-bd32283fb29c?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1756074870452-01da397cd57f?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1750601455226-db033260b715?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1758210606707-ed9a369e1e3f?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1759340875463-30962542e44d?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1758272410353-bd32283fb29c?w=400&h=400&fit=crop"
-            ].map((img, index) => (
-              <div
-                key={index}
-                className="aspect-square overflow-hidden rounded-2xl group cursor-pointer"
-              >
-                <img
-                  src={img}
-                  alt={`Galería ${index + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
-            ))}
-          </div>
+          <GalleryCarousel images={galleryImages} />
         </div>
       </section>
 
