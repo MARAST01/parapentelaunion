@@ -5,6 +5,15 @@
    clases tipográficas que consume App.tsx.
    ============================================================ */
 
+/* Importación única y optimizada para todas las fuentes y sus grosores */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;500;600;700&family=Outfit:wght@400;500;600&family=Playfair+Display:wght@700&family=Racing+Sans+One&family=Sora:wght@400;600;700&display=swap');
+
+.racing-sans-one-regular {
+  font-family: "Racing Sans One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .bangers-regular {
   font-family: "Bangers", system-ui;
   font-weight: 400;
