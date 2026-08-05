@@ -268,9 +268,9 @@ export default function App() {
             <div className="flex items-center gap-2">
               <img src="/imports/logo.webp" alt="Logo" className="w-15 h-15" />
               <span
-                className="bangers-regular text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
+                className="racing-sans-one-regular text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
               >
-                Parapente La Unión
+                PARAPENTE LA UNIÓN
               </span>
             </div>
             <div className="hidden md:flex items-center gap-8">
