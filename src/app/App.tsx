@@ -268,7 +268,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <img src="/imports/logo.webp" alt="Logo" className="w-15 h-15" />
               <span
-                className="racing-sans-one-regular text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
+                className="font-brand font-bold text text-xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
               >
                 PARAPENTE LA UNIÓN
               </span>
