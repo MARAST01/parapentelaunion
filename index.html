@@ -1,23 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Parapente La Union</title>
-      <meta name="description" content="Parapente La Union" />
-      <meta name="robots" content="noindex, nofollow" />
-      <link rel="icon" type="image/webp" sizes="32x32" href="/imports/logo.webp" />
-      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
-      
-    </head>
+    <!-- ⚠️ IMPORTANTE: si ya tienes un index.html (generado por Vite), NO lo
+         reemplaces completo. Copia el contenido de este <head> dentro del
+         tuyo, y deja intacta la línea final <script type="module" src="/src/main.tsx">. -->
 
-    <body>
-      
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-      
-    </body>
-  </html>
-  
+    <title>Parapente La Unión | Vuelos en Parapente en Valle del Cauca, Colombia</title>
+    <meta
+      name="description"
+      content="Vuela en parapente en La Unión, Valle del Cauca con pilotos certificados con más de 23 años de experiencia. Foto y video incluidos, letreros personalizados y vuelo extremo. ¡Reserva por WhatsApp!"
+    />
+    <meta
+      name="keywords"
+      content="parapente La Unión, parapente Valle del Cauca, vuelo en parapente Colombia, parapentismo La Unión, turismo de aventura Valle del Cauca, vuelo biplaza parapente, parapente Cali"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Parapente La Unión" />
+    <meta name="theme-color" content="#6d28d9" />
+    <link rel="canonical" href="https://parapentelaunion.netlify.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Parapente La Unión | Vuelos en Parapente en Valle del Cauca" />
+    <meta
+      property="og:description"
+      content="Experimenta la libertad del vuelo con los mejores pilotos certificados de La Unión, Valle del Cauca. Reserva tu vuelo hoy mismo."
+    />
+    <meta property="og:image" content="https://parapentelaunion.netlify.app/imports/carrusel/imagen61.webp" />
+    <meta property="og:url" content="https://parapentelaunion.netlify.app/" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content="Parapente La Unión" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Parapente La Unión | Vuelos en Parapente en Valle del Cauca" />
+    <meta
+      name="twitter:description"
+      content="Vuela en parapente con pilotos certificados en La Unión, Valle del Cauca. ¡Reserva ya!"
+    />
+    <meta name="twitter:image" content="https://parapentelaunion.netlify.app/imports/carrusel/imagen61.webp" />
+
+    <link rel="icon" type="image/webp" href="/imports/logo.webp" />
+
+    <!-- Datos estructurados: negocio local / actividad deportiva -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsActivityLocation",
+      "name": "Parapente La Unión",
+      "description": "Escuela y operador de vuelos en parapente biplaza en La Unión, Valle del Cauca, Colombia. Pilotos certificados con más de 23 años de experiencia.",
+      "image": "https://parapentelaunion.netlify.app/imports/carrusel/imagen61.webp",
+      "url": "https://parapentelaunion.netlify.app/",
+      "telephone": "+573205844385",
+      "email": "info@parapentelaunion.netlify.app",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "La Unión",
+        "addressRegion": "Valle del Cauca",
+        "addressCountry": "CO"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 4.5317897,
+        "longitude": -76.1012649
+      },
+      "sameAs": [
+        "https://www.facebook.com/parapentelaunion/",
+        "https://www.instagram.com/parapentelaunion/"
+      ],
+      "priceRange": "$$"
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

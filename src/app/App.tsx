@@ -152,10 +152,11 @@ function GalleryCarousel({ images }: { images: string[] }) {
                 >
                   <img
                     src={img}
-                    alt={`Galería ${realIdx + 1}`}
+                    alt={`Vuelo en parapente en La Unión, Valle del Cauca - foto ${realIdx + 1}`}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     draggable={false}
                     decoding="async"
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -208,7 +209,7 @@ function GalleryCarousel({ images }: { images: string[] }) {
 
           <img
             src={images[lightboxIndex]}
-            alt={`Galería ${lightboxIndex + 1}`}
+            alt={`Vuelo en parapente en La Unión, Valle del Cauca - foto ${lightboxIndex + 1}`}
             className="max-w-full max-h-[85vh] rounded-3xl object-contain shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           />
@@ -226,6 +227,109 @@ function GalleryCarousel({ images }: { images: string[] }) {
       )}
     </div>
   );
+}
+
+// --- SEO: título, meta tags, Open Graph, Twitter Card, canonical y datos
+// estructurados (JSON-LD) para que los buscadores entiendan e indexen
+// correctamente el negocio. Como es una SPA, estos tags se inyectan en el
+// <head> al montar la app; igual conviene reforzar el index.html estático
+// (ver archivos aparte) para que aparezcan también antes de que cargue el JS.
+const SITE_URL = 'https://parapentelaunion.netlify.app/';
+const SITE_TITLE = 'Parapente La Unión | Vuelos en Parapente en Valle del Cauca, Colombia';
+const SITE_DESCRIPTION =
+  'Vuela en parapente en La Unión, Valle del Cauca con pilotos certificados con más de 23 años de experiencia. Foto y video incluidos, letreros personalizados y vuelo extremo. ¡Reserva por WhatsApp!';
+
+function SEO() {
+  useEffect(() => {
+    document.documentElement.lang = 'es';
+    document.title = SITE_TITLE;
+
+    const setMeta = (attr: 'name' | 'property', key: string, content: string) => {
+      let tag = document.querySelector(`meta[${attr}="${key}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute(attr, key);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    // Meta básicos
+    setMeta('name', 'description', SITE_DESCRIPTION);
+    setMeta(
+      'name',
+      'keywords',
+      'parapente La Unión, parapente Valle del Cauca, vuelo en parapente Colombia, parapentismo La Unión, turismo de aventura Valle del Cauca, vuelo biplaza parapente, parapente Cali'
+    );
+    setMeta('name', 'robots', 'index, follow');
+    setMeta('name', 'googlebot', 'index, follow');
+    setMeta('name', 'author', 'Parapente La Unión');
+    setMeta('name', 'theme-color', '#6d28d9');
+
+    // Open Graph (Facebook, WhatsApp, etc.)
+    setMeta('property', 'og:type', 'website');
+    setMeta('property', 'og:title', SITE_TITLE);
+    setMeta('property', 'og:description', SITE_DESCRIPTION);
+    setMeta('property', 'og:image', `${SITE_URL}/imports/carrusel/imagen61.webp`);
+    setMeta('property', 'og:url', SITE_URL);
+    setMeta('property', 'og:locale', 'es_CO');
+    setMeta('property', 'og:site_name', 'Parapente La Unión');
+
+    // Twitter Card
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', SITE_TITLE);
+    setMeta('name', 'twitter:description', SITE_DESCRIPTION);
+    setMeta('name', 'twitter:image', `${SITE_URL}/imports/carrusel/imagen61.webp`);
+
+    // Canonical: evita contenido duplicado ante buscadores
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', SITE_URL);
+
+    // Datos estructurados (JSON-LD): ayuda a Google a mostrar rich results
+    // (negocio local, teléfono, ubicación, redes sociales) en resultados y Maps.
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'SportsActivityLocation',
+      name: 'Parapente La Unión',
+      description: SITE_DESCRIPTION,
+      image: `${SITE_URL}/imports/carrusel/imagen61.webp`,
+      url: SITE_URL,
+      telephone: '+573205844385',
+      email: 'info@parapente-launion.com',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'La Unión',
+        addressRegion: 'Valle del Cauca',
+        addressCountry: 'CO',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 4.5317897,
+        longitude: -76.1012649,
+      },
+      sameAs: [
+        'https://www.facebook.com/parapentelaunion/',
+        'https://www.instagram.com/parapentelaunion/',
+      ],
+      priceRange: '$$',
+    };
+
+    let script = document.getElementById('ld-json-business') as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'ld-json-business';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(jsonLd);
+  }, []);
+
+  return null;
 }
 
 export default function App() {
@@ -257,6 +361,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO />
       {/* Navigation */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 transition-opacity duration-700 ease-out ${
@@ -289,12 +394,15 @@ export default function App() {
         </div>
       </nav>
 
+      <main>
       {/* Hero Section */}
       <section id="inicio" className="relative h-screen flex items-center justify-center overflow-hidden">
         <img
           src={heroImage}
-          alt="Parapente La Unión sobre paisaje montañoso"
+          alt="Parapente biplaza volando sobre las montañas de La Unión, Valle del Cauca, Colombia"
           className="absolute inset-0 w-full h-full object-cover"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-purple-700/30 to-purple-600/40" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -616,6 +724,7 @@ export default function App() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="bg-gradient-to-br from-purple-900 to-purple-700 text-white py-12">
