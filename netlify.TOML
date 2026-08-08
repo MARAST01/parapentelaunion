@@ -1,0 +1,25 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Redirección SPA: necesaria para que cualquier ruta cargue index.html
+# (así el <SEO /> y el resto de la app siempre se montan bien).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cachea agresivamente las imágenes de la galería/hero (son estáticas)
+[[headers]]
+  for = "/imports/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cabeceras de seguridad básicas (Google las valora indirectamente vía
+# "safe browsing" y ayudan a evitar penalizaciones por vulnerabilidades)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
