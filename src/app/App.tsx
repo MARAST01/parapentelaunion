@@ -25,6 +25,26 @@ const galleryImages = [
   '/imports/carrusel/imagen20.webp',
 ];
 
+
+function GoogleReviewsSection() {
+  return (
+    <section id="testimonios" className="py-20 bg-gradient-to-br from-purple-900 to-purple-700">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-h2 text-white mb-4">
+            Experiencias Inolvidables
+          </h2>
+          <p className="text-body-copy text-purple-100">
+            Cada vuelo cuenta una historia. Estas son las experiencias de quienes ya se atrevieron a volar con nosotros.
+          </p>
+        </div>
+        {/* Widget de Elfsight: se actualiza solo desde tu perfil de Google Business */}
+        <div className="elfsight-app-129c90f9-051f-471d-9109-69ca853fe12a" data-elfsight-app-lazy></div>
+      </div>
+    </section>
+  );
+}
+
 function GalleryCarousel({ images }: { images: string[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(1);
@@ -557,62 +577,7 @@ export default function App() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonios" className="py-20 bg-gradient-to-br from-purple-900 to-purple-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-h2 text-white mb-4">
-              Experiencias Inolvidables
-            </h2>
-            <p className="text-body-copy text-purple-100">
-              Cada vuelo cuenta una historia. Estas son las experiencias de quienes ya se atrevieron a volar con nosotros.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "María García",
-                text: "Una experiencia increíble. El equipo es muy profesional y te hacen sentir completamente seguro. ¡Las vistas son espectaculares!",
-                rating: 5,
-                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop"
-              },
-              {
-                name: "Carlos Rodríguez",
-                text: "Fue mi primera vez volando en parapente y superó todas mis expectativas. Los instructores son excelentes y el paisaje es hermoso.",
-                rating: 5,
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop"
-              },
-              {
-                name: "Ana Martínez",
-                text: "¡Simplemente mágico! Una aventura que todos deberían vivir al menos una vez. El servicio de fotos y video es increíble.",
-                rating: 5,
-                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop"
-              }
-            ].map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl p-8 shadow-xl hover:scale-105 transition-all"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-16 h-16 rounded-full object-cover ring-4 ring-purple-100"
-                  />
-                  <div>
-                    <h4 className="testimonial-name-text text-gray-900">{testimonial.name}</h4>
-                    <div className="flex gap-1">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <span key={i} className="text-yellow-400">★</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="testimonial-comment-text text-gray-600 italic">"{testimonial.text}"</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <GoogleReviewsSection />
 
       {/* Stats Section */}
       <section className="py-16 bg-gradient-to-br from-purple-600 to-purple-700">
@@ -622,7 +587,7 @@ export default function App() {
               { number: "+500", label: "Vuelos realizados" },
               { number: "23+", label: "Años de experiencia" },
               { number: "100%", label: "Seguridad certificada" },
-              { number: "4.9", label: "Calificación promedio" }
+              { number: "5.0", label: "Calificación promedio" }
             ].map((stat, index) => (
               <div key={index}>
                 <p className="stat-number-text text-white mb-1">{stat.number}</p>
